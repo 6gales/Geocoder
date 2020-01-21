@@ -4,14 +4,92 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
-		xmlns:local="clr-namespace:Geocoder"
+		xmlns:viewModels="clr-namespace:Geocoder.ViewModels"
+		xmlns:custom="clr-namespace:Geocoder.Controls"
 		mc:Ignorable="d"
 		Title="MainWindow" Height="450" Width="800">
+	<Window.DataContext>
+		<viewModels:GeocoderViewModel x:Name="ViewModel"/>
+	</Window.DataContext>
 	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition></RowDefinition>
+			<RowDefinition></RowDefinition>
+			<RowDefinition></RowDefinition>
+			<RowDefinition></RowDefinition>
+			<RowDefinition></RowDefinition>
+			<RowDefinition></RowDefinition>
+			<RowDefinition></RowDefinition>
+			<RowDefinition></RowDefinition>
+			<RowDefinition></RowDefinition>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition></ColumnDefinition>
+			<ColumnDefinition></ColumnDefinition>
+			<ColumnDefinition></ColumnDefinition>
+			<ColumnDefinition></ColumnDefinition>
+			<ColumnDefinition></ColumnDefinition>
+			<ColumnDefinition></ColumnDefinition>
+			<ColumnDefinition></ColumnDefinition>
+			<ColumnDefinition></ColumnDefinition>
+			<ColumnDefinition></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+		<Grid.Background>
+			<ImageBrush Opacity="0.7"></ImageBrush>
+		</Grid.Background>
 		<m:Map
+			Grid.Column="0" Grid.ColumnSpan="9"
+			Grid.Row="0" Grid.RowSpan="9"
 			CredentialsProvider="AtqMAUT-Eij5g-md0f59bgwwjovGn3c53GqAqd1cfY27XJmiNaU4tBIdIK4hSnTZ"
 			x:Name="DisplayedMap"
-			MouseDoubleClick="AddPushpinOnDoubleClick"/>
+			MouseDoubleClick="AddPushpinOnDoubleClick"
+		/>
+		
+		<Label
+			Grid.Column="0" Grid.Row="0"
+			Background="Transparent"			
+			>Address:
+		</Label>
+		<TextBox
+			Grid.Column="0" Grid.Row="1"
+			MinWidth="100" MaxWidth="100" MaxHeight="50"
+			Margin="3,3,0,3" Padding="3" Name="AddressInput" FontSize="30"
+		/>
+
+		<custom:InversiveButton
+			Grid.Column="0" Grid.Row="1"
+			FontFamily="Segoe MDL2 Assets"
+			Content="&#xE72A;" InversedContent="&#xE72B;"
+			Click="ChangeGeocodingModeOnClick"
+		/>
+
+		<Label
+			Grid.Column="1" Grid.Row="0"
+			Background="Transparent"			
+			>Latitude:
+		</Label>
+		<TextBox
+			Grid.Column="1" Grid.Row="1"
+			MinWidth="100" MaxWidth="100" MaxHeight="50"
+			Margin="3,3,0,3" Padding="3" Name="LatitudeInput" FontSize="30"
+		/>
+	
+		<Label
+			Grid.Column="2" Grid.Row="0"
+			Background="Transparent"
+			>Longitude:
+		</Label>
+		<TextBox
+			Grid.Column="2" Grid.Row="1"
+			MinWidth="100" MaxWidth="100" MaxHeight="50"
+			Margin="3,3,0,3" Padding="3" Name="LongitudeInput" FontSize="30"
+		/>
+
+		<ComboBox
+			Text="" IsEditable="True"
+			Name="AddressInputa"
+			ItemsSource="{Binding History}">
+		</ComboBox>
 	</Grid>
 
 </Window>
