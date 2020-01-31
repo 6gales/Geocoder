@@ -11,11 +11,8 @@ namespace Geocoder.ViewModels
 	{
 		private List<string> _history = new List<string>();
 
-		public IEnumerable<string> History
-		{
-			get => _history;
-			set => _history = value.ToList();
-		}
+		public IEnumerable<string> AddressHistory => _history;
+		public string UserInput { get; set; }
 
 		public void Add(string a)
 		{

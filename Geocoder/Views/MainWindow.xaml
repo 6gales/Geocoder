@@ -11,85 +11,92 @@
 	<Window.DataContext>
 		<viewModels:GeocoderViewModel x:Name="ViewModel"/>
 	</Window.DataContext>
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition></RowDefinition>
-			<RowDefinition></RowDefinition>
-			<RowDefinition></RowDefinition>
-			<RowDefinition></RowDefinition>
-			<RowDefinition></RowDefinition>
-			<RowDefinition></RowDefinition>
-			<RowDefinition></RowDefinition>
-			<RowDefinition></RowDefinition>
-			<RowDefinition></RowDefinition>
-		</Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition></ColumnDefinition>
-			<ColumnDefinition></ColumnDefinition>
-			<ColumnDefinition></ColumnDefinition>
-			<ColumnDefinition></ColumnDefinition>
-			<ColumnDefinition></ColumnDefinition>
-			<ColumnDefinition></ColumnDefinition>
-			<ColumnDefinition></ColumnDefinition>
-			<ColumnDefinition></ColumnDefinition>
-			<ColumnDefinition></ColumnDefinition>
-		</Grid.ColumnDefinitions>
-		<Grid.Background>
-			<ImageBrush Opacity="0.7"></ImageBrush>
-		</Grid.Background>
+	<Canvas>
 		<m:Map
-			Grid.Column="0" Grid.ColumnSpan="9"
-			Grid.Row="0" Grid.RowSpan="9"
+			Height="auto" Width="auto"
 			CredentialsProvider="AtqMAUT-Eij5g-md0f59bgwwjovGn3c53GqAqd1cfY27XJmiNaU4tBIdIK4hSnTZ"
 			x:Name="DisplayedMap"
 			MouseDoubleClick="AddPushpinOnDoubleClick"
 		/>
 		
 		<Label
-			Grid.Column="0" Grid.Row="0"
+			Canvas.Top="5" Canvas.Left="10"
 			Background="Transparent"			
 			>Address:
 		</Label>
-		<TextBox
-			Grid.Column="0" Grid.Row="1"
-			MinWidth="100" MaxWidth="100" MaxHeight="50"
-			Margin="3,3,0,3" Padding="3" Name="AddressInput" FontSize="30"
-		/>
+		<ComboBox
+			Canvas.Top="30" Canvas.Left="5"
+			Width="150" Height="30"
+			IsEditable="True"
+			Name="AddressInput"
+			ItemsSource="{Binding AddressHistory, Mode=OneWay}">
+		</ComboBox>
 
 		<custom:InversiveButton
-			Grid.Column="0" Grid.Row="1"
+			Canvas.Top="30" Canvas.Left="160"
+			Width="30" Height="30"
 			FontFamily="Segoe MDL2 Assets"
 			Content="&#xE72A;" InversedContent="&#xE72B;"
 			Click="ChangeGeocodingModeOnClick"
 		/>
 
 		<Label
-			Grid.Column="1" Grid.Row="0"
+			Canvas.Top="5" Canvas.Left="200"
+			Background="Transparent"
+		>Latitude and Longitude:
+		</Label>
+		<ComboBox
+			Canvas.Top="30" Canvas.Left="195"
+			Width="150" Height="30"
+			IsEditable="True"
+			ItemsSource="{Binding AddressHistory, Mode=OneWay}">
+		</ComboBox>
+
+		<Button
+			Canvas.Top="30" Canvas.Left="350"
+			Width="30" Height="30"
+			FontFamily="Segoe MDL2 Assets"
+			Content="&#xE721;" Click="GeocodeOnClick">
+			<Button.Style>
+				<Style TargetType="Button">
+					<Setter Property="IsEnabled" Value="True" />
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding Text, ElementName={Binding UserInput} }" Value="">
+							<Setter Property="IsEnabled" Value="False" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</Button.Style>
+		</Button>
+
+		<!--<Label
+			Grid.Column="2" Grid.Row="0"
 			Background="Transparent"			
 			>Latitude:
 		</Label>
 		<TextBox
-			Grid.Column="1" Grid.Row="1"
+			Grid.Column="2" Grid.Row="1"
 			MinWidth="100" MaxWidth="100" MaxHeight="50"
-			Margin="3,3,0,3" Padding="3" Name="LatitudeInput" FontSize="30"
+			Name="LatitudeInput" FontSize="30"
 		/>
 	
 		<Label
-			Grid.Column="2" Grid.Row="0"
+			Grid.Column="3" Grid.Row="0"
 			Background="Transparent"
 			>Longitude:
 		</Label>
 		<TextBox
-			Grid.Column="2" Grid.Row="1"
+			Grid.Column="3" Grid.Row="1"
 			MinWidth="100" MaxWidth="100" MaxHeight="50"
-			Margin="3,3,0,3" Padding="3" Name="LongitudeInput" FontSize="30"
-		/>
+			Name="LongitudeInput" FontSize="30"
+		/>-->
+		<!--<ComboBox
+			Grid.Column="3" Grid.Row="1"
+			IsEditable="True"
+			Name="AddressInput"
+			ItemsSource="{Binding AddressHistory, Mode=OneWay}">
+		</ComboBox>-->
 
-		<ComboBox
-			Text="" IsEditable="True"
-			Name="AddressInputa"
-			ItemsSource="{Binding History}">
-		</ComboBox>
-	</Grid>
+	</Canvas>
 
 </Window>
