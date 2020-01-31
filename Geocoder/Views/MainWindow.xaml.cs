@@ -31,6 +31,7 @@ namespace Geocoder
 		{
 			InitializeComponent();
 			DisplayedMap.Focus();
+			ICommand c;
 		}
 
 		private void AddPushpinOnDoubleClick(object sender, MouseButtonEventArgs e)
@@ -55,5 +56,5 @@ namespace Geocoder
 		{
 
 		}
-    }
+	}
 }

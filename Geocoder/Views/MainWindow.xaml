@@ -5,7 +5,7 @@
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
 		xmlns:viewModels="clr-namespace:Geocoder.ViewModels"
-		xmlns:custom="clr-namespace:Geocoder.Controls"
+		xmlns:custom="clr-namespace:Geocoder.Views.Controls"
 		mc:Ignorable="d"
 		Title="MainWindow" Height="450" Width="800">
 	<Window.DataContext>
@@ -13,7 +13,7 @@
 	</Window.DataContext>
 	<Canvas>
 		<m:Map
-			Height="auto" Width="auto"
+			Height="*" Width="*"
 			CredentialsProvider="AtqMAUT-Eij5g-md0f59bgwwjovGn3c53GqAqd1cfY27XJmiNaU4tBIdIK4hSnTZ"
 			x:Name="DisplayedMap"
 			MouseDoubleClick="AddPushpinOnDoubleClick"
@@ -57,16 +57,7 @@
 			Width="30" Height="30"
 			FontFamily="Segoe MDL2 Assets"
 			Content="&#xE721;" Click="GeocodeOnClick">
-			<Button.Style>
-				<Style TargetType="Button">
-					<Setter Property="IsEnabled" Value="True" />
-					<Style.Triggers>
-						<DataTrigger Binding="{Binding Text, ElementName={Binding UserInput} }" Value="">
-							<Setter Property="IsEnabled" Value="False" />
-						</DataTrigger>
-					</Style.Triggers>
-				</Style>
-			</Button.Style>
+			<!-- add command -->
 		</Button>
 
 		<!--<Label

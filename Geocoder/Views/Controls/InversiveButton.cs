@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Geocoder.Controls
+namespace Geocoder.Views.Controls
 {
 	class InversiveButton : Button
 	{
