@@ -9,7 +9,7 @@
 		mc:Ignorable="d"
 		Title="MainWindow" Height="450" Width="800">
 	<Window.DataContext>
-		<viewModels:GeocoderViewModel x:Name="ViewModel"/>
+		<viewModels:GeocoderViewModel x:Name="GeocoderViewModel"/>
 	</Window.DataContext>
 	<Grid>
 		<Grid.RowDefinitions>
@@ -29,7 +29,7 @@
 			Height="auto" Width="auto"
 			CredentialsProvider="AtqMAUT-Eij5g-md0f59bgwwjovGn3c53GqAqd1cfY27XJmiNaU4tBIdIK4hSnTZ"
 			x:Name="DisplayedMap"
-			MouseDoubleClick="AddPushpinOnDoubleClick"
+			MouseDoubleClick="ReverseGeocodeOnDoubleClick"
 			ZoomLevel="1"
 		/>
 
@@ -44,8 +44,8 @@
 			Margin="5,0,5,0"
 			Width="150" Height="30"
 			IsEditable="True"
-			Name="AddressInput"
-			ItemsSource="{Binding AddressHistory, Mode=OneWay}">
+			ItemsSource="{Binding AddressHistory, Mode=OneWay}"
+			Text="{Binding Address, UpdateSourceTrigger=LostFocus}">
 		</ComboBox>
 
 		<custom:InversiveButton
@@ -53,6 +53,7 @@
 			Margin="0,0,5,0"
 			Width="30" Height="30"
 			FontFamily="Segoe MDL2 Assets"
+			x:Name="GeocodingMode"
 			Content="&#xE72A;" InversedContent="&#xE72B;"
 			Click="ChangeGeocodingModeOnClick"
 		/>
@@ -68,7 +69,8 @@
 			Margin="0,0,5,0"
 			Width="150" Height="30"
 			IsEditable="True"
-			ItemsSource="{Binding AddressHistory, Mode=OneWay}">
+			ItemsSource="{Binding LocationHistory, Mode=OneWay}"
+			Text="{Binding Location, UpdateSourceTrigger=LostFocus}">
 		</ComboBox>
 
 		<Button
@@ -76,8 +78,10 @@
 			Margin="0,0,0,0"
 			Width="30" Height="30"
 			FontFamily="Segoe MDL2 Assets"
-			Content="&#xE721;" Click="GeocodeOnClick">
-			<!-- add command -->
+			Content="&#xE721;" Click="GeocodeOnClick"
+			Command="{Binding GeocodeCommand, Mode=OneWay}"
+			>
+			
 		</Button>
 
 		<!--<Label

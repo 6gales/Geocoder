@@ -1,24 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
+using Geocoder.Models;
+using Geocoder.ViewModels.Commands;
+using Geocoding;
 
 namespace Geocoder.ViewModels
 {
 	class GeocoderViewModel : INotifyPropertyChanged
 	{
-		private List<string> _history = new List<string>();
+		private readonly Models.IGeocoder _geocoder = new BingGeocoder();
 
-		public IEnumerable<string> AddressHistory => _history;
-		public string UserInput { get; set; }
+		public string Address { get; set; }
+		public string Location { get; set; }
 
-		public void Add(string a)
-		{
-			_history.Add(a);
-			OnPropertyChanged($"History");
-		}
+		public IEnumerable<string> AddressHistory => _geocoder.AddressHistory;
+		public IEnumerable<Location> LocationHistory => _geocoder.LocationHistory;
+
+		public GeocodeCommand GeocodeCommand { get; } = new GeocodeCommand(() => true);
+
 
 		public event PropertyChangedEventHandler PropertyChanged;
 

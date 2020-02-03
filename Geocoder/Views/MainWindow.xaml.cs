@@ -1,21 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Geocoding;
-using Geocoding.Microsoft;
 using Microsoft.Maps.MapControl.WPF;
-using Location = Microsoft.Maps.MapControl.WPF.Location;
 
 namespace Geocoder
 {
@@ -25,36 +11,49 @@ namespace Geocoder
 	public partial class MainWindow : Window
 	{
 		private bool _addressToPos = true;
-		private Pushpin _pin;
+		private readonly List<Pushpin> _pins = new List<Pushpin>();
 
 		public MainWindow()
 		{
 			InitializeComponent();
 			DisplayedMap.Focus();
-			ICommand c;
 		}
 
-		private void AddPushpinOnDoubleClick(object sender, MouseButtonEventArgs e)
+		private void ReverseGeocodeOnDoubleClick(object sender, MouseButtonEventArgs e)
 		{
 			e.Handled = true;
 
-			Point mousePosition = e.GetPosition(this);
-			Location pinLocation = DisplayedMap.ViewportPointToLocation(mousePosition);
+			foreach (var pin in _pins)
+			{
+				DisplayedMap.Children.Remove(pin);
+			}
+			_pins.Clear();
 
-			_pin = new Pushpin {Location = pinLocation};
+			if (_addressToPos)
+			{
+				_addressToPos = false;
+				GeocodingMode.InverseContent();
+			}
 
-			DisplayedMap.Children.Add(_pin);
+			var mousePosition = e.GetPosition(this);
+			var pinLocation = DisplayedMap.ViewportPointToLocation(mousePosition);
+
+			var newPin = new Pushpin {Location = pinLocation};
+			_pins.Add(newPin);
+			DisplayedMap.Children.Add(newPin);
+
+			GeocoderViewModel.Location = "0 0"; //pinLocation.ToString();
 		}
 
-		private async void ChangeGeocodingModeOnClick(object sender, RoutedEventArgs e)
+		private void ChangeGeocodingModeOnClick(object sender, RoutedEventArgs e)
 		{
 			_addressToPos = !_addressToPos;
-			ViewModel.Add("afaaf");
 		}
 
 		private async void GeocodeOnClick(object sender, RoutedEventArgs e)
 		{
 
 		}
+
 	}
 }

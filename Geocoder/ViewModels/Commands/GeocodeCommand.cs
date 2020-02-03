@@ -7,9 +7,15 @@ namespace Geocoder.ViewModels.Commands
 {
 	class GeocodeCommand : ICommand
 	{
+
+		public GeocodeCommand(Func<bool> isAddrToPos)
+		{
+
+		}
+
 		public bool CanExecute(object parameter)
 		{
-			throw new NotImplementedException();
+			return false;
 		}
 
 		public void Execute(object parameter)
