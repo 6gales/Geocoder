@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Geocoding;
 using Microsoft.Maps.MapControl.WPF;
+using Location = Microsoft.Maps.MapControl.WPF.Location;
 
-namespace Geocoder
+namespace Geocoder.Views
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow
 	{
-		private bool _addressToPos = true;
 		private readonly List<Pushpin> _pins = new List<Pushpin>();
 
 		public MainWindow()
@@ -19,19 +21,68 @@ namespace Geocoder
 			DisplayedMap.Focus();
 		}
 
-		private void ReverseGeocodeOnDoubleClick(object sender, MouseButtonEventArgs e)
+		private void AddPins(IEnumerable<Address> addresses)
 		{
-			e.Handled = true;
+			foreach (var address in addresses)
+			{
+				var pin = new Pushpin { Location = new Location(address.Coordinates.Latitude, address.Coordinates.Longitude) };
+				_pins.Add(pin);
+				DisplayedMap.Children.Add(pin);
+			}
 
+			try
+			{
+				DisplayedMap.Center = _pins.First().Location;
+				DisplayedMap.ZoomLevel = 4;
+			}
+			catch
+			{
+				// ignored
+			}
+		}
+
+		private void RemovePins()
+		{
 			foreach (var pin in _pins)
 			{
 				DisplayedMap.Children.Remove(pin);
 			}
 			_pins.Clear();
+		}
 
-			if (_addressToPos)
+		private async void GeocodeOnEnterKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key != Key.Enter || !GeocoderViewModel.CanGeocode)
 			{
-				_addressToPos = false;
+				return;
+			}
+
+			RemovePins();
+			var addresses = await GeocoderViewModel.Geocode();
+			if (addresses == null)
+			{
+				ShowErrorDialog();
+				return;
+			}
+			AddPins(addresses);
+		}
+
+		private void ShowErrorDialog()
+		{
+			var message = $"Sorry, we couldn't understand your position: {GeocoderViewModel.Location}. "
+			              + "Consider using space or semicolon as separators";
+			MessageBox.Show(message, "Reverse geocoding failed");
+		}
+
+		private async void ReverseGeocodeOnDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			e.Handled = true;
+
+			RemovePins();
+
+			if (GeocoderViewModel.AddressToPos)
+			{
+				GeocoderViewModel.AddressToPos = false;
 				GeocodingMode.InverseContent();
 			}
 
@@ -42,18 +93,26 @@ namespace Geocoder
 			_pins.Add(newPin);
 			DisplayedMap.Children.Add(newPin);
 
-			GeocoderViewModel.Location = "0 0"; //pinLocation.ToString();
+			GeocoderViewModel.Location = $"{pinLocation.Latitude} {pinLocation.Longitude}";
+
+			await GeocoderViewModel.Geocode();
 		}
 
 		private void ChangeGeocodingModeOnClick(object sender, RoutedEventArgs e)
 		{
-			_addressToPos = !_addressToPos;
+			GeocoderViewModel.AddressToPos = !GeocoderViewModel.AddressToPos;
 		}
 
 		private async void GeocodeOnClick(object sender, RoutedEventArgs e)
 		{
-
+			RemovePins();
+			var addresses = await GeocoderViewModel.Geocode();
+			if (addresses == null)
+			{
+				ShowErrorDialog();
+				return;
+			}
+			AddPins(addresses);
 		}
-
 	}
 }
